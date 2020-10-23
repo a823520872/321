@@ -31,7 +31,7 @@ const store = new Vuex.Store({
                     .finally(() => {
                         uni.login().then(res => {
                             let { code } = res[1]
-                            ajax('/api/wx/login', { code }).then(res => {
+                            ajax('/api/wx/auth', { code }).then(res => {
                                 if (res && res.data) {
                                     uni.setStorageSync('token', res.data.token)
                                 }

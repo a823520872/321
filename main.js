@@ -7,7 +7,7 @@ import Methods from './common/methods.js'
 Vue.config.productionTip = false
 
 Object.keys(Methods).map(method => {
-    Vue.prototype[`$${method}`] = Methods[method]
+    Vue.prototype[`${method}`] = Methods[method]
 })
 
 Vue.prototype.$store = store

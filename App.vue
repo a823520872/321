@@ -35,10 +35,12 @@ image {
 }
 
 image {
-    max-width: 100%;
-    display: inline-block;
-    position: relative;
-    z-index: 0;
+    // max-width: 100%;
+    // display: inline-block;
+    // position: relative;
+    // z-index: 0;
+    width: 100%;
+    height: 100%;
 }
 
 switch,

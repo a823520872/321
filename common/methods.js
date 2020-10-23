@@ -16,5 +16,21 @@ export default {
                 url: `/pages/me/webview?src=${encodeURIComponent(url)}`
             })
         }
+    },
+    back(delta = 1) {
+        uni.navigateBack({
+            delta
+        })
+    },
+    upload(count = 9) {
+        return new Promise((resolve, reject) => {
+            uni.chooseImage({
+                sizeType: ['compressed'],
+                sourceType: ['album'],
+                count: count,
+                success: resolve,
+                fail: reject
+            })
+        })
     }
 }

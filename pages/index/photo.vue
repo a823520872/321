@@ -1,15 +1,14 @@
 <template>
     <view class="m_content">
-        <view class="album_list m_flex_wrap">
-            <view class="item" v-for="(li, i) in album" :key="i" @tap="toPhoto(li)">
+        <view class="photo_list m_flex_wrap">
+            <view class="item" v-for="(li, i) in album.photos" :key="i" @tap="viewPhoto(li)">
                 <view class="box">
-                    <image :src="li.photos[0]" mode="aspectFill"></image>
+                    <image :src="li" mode="aspectFill"></image>
                 </view>
-                <view class="title">{{li.name}}</view>
             </view>
-            <view class="item last" @tap="toCreate">
-                <view class="box"></view>
-            </view>
+        </view>
+        <view class="fd">
+            <button class="m_btn" @tap="handleClick">编辑</button>
         </view>
     </view>
 </template>
@@ -18,35 +17,39 @@
 export default {
     data() {
         return {
-            album: []
+            albm_id: '',
+            album: null
         }
     },
-    onShow() {
-        this.getData()
+    onLoad(res) {
+        this.albm_id = res.id
+    },
+    onReady() {
+        if (this.albm_id) {
+            this.getData()
+        }
     },
     methods: {
         getData() {
-            this.$store.dispatch('getProfile').then(() => {
-                this.getAlbum()
+            this.$ajax(`/api/album/${this.albm_id}`).then(res => {
+                this.album = res.data
             })
         },
-        getAlbum() {
-            this.$ajax('/api/album').then(res => {
-                this.album = res.data || []
+        viewPhoto(li) {
+            uni.previewImage({
+                current: li,
+                urls: this.album.photos
             })
         },
-        toPhoto(li) {
-            this.$goPage(`/pages/index/photo?id=${li.id}`)
-        },
-        toCreate() {
-            this.$goPage('/pages/index/album')
+        handleClick() {
+            this.$goPage(`/pages/index/album?id=${this.albm_id}`)
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.album_list {
+.photo_list {
     padding: 24upx 20upx;
 
     .item {
@@ -61,16 +64,6 @@ export default {
         border-radius: 12upx;
         overflow: hidden;
     }
-
-    .title {
-        width: 100%;
-        padding: 10upx 0 20upx;
-        line-height: 40upx;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
     .last {
         .box {
             &::before,
@@ -96,5 +89,8 @@ export default {
             }
         }
     }
+}
+.fd {
+    padding: 24upx 30upx;
 }
 </style>
